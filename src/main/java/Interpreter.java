@@ -45,10 +45,10 @@ public class Interpreter extends MiniLangBaseVisitor<Value> {
     }
 
     @Override
-    public Value visitDoWhileStmt(MiniLangParser.DoWhileStmtContext ctx) {
+    public Value visitRepeatUntilStmt(MiniLangParser.RepeatUntilStmtContext ctx) {
         do {
             visit(ctx.block());
-        } while (visit(ctx.expr()).asBool());
+        } while (!visit(ctx.expr()).asBool());
         return Value.defaultFor(Type.VOID);
     }
 

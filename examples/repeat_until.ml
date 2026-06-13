@@ -1,12 +1,12 @@
-// Variante asignada: do-while.
+// Variante asignada: repeat-until.
 var n : int = 0;
 var suma : int = 0;
 
-do {
+repeat {
     print(n);
     suma = suma + n;
     n = n + 1;
-} while (n < 5);
+} until (n == 5);
 
 if (suma == 10) {
     print("Suma correcta");

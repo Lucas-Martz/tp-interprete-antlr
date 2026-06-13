@@ -9,7 +9,7 @@ statement
     | assignment
     | printStmt
     | ifStmt
-    | doWhileStmt
+    | repeatUntilStmt
     | block
     ;
 
@@ -29,8 +29,8 @@ ifStmt
     : 'if' '(' expr ')' block 'else' block
     ;
 
-doWhileStmt
-    : 'do' block 'while' '(' expr ')' ';'
+repeatUntilStmt
+    : 'repeat' block 'until' '(' expr ')' ';'
     ;
 
 block

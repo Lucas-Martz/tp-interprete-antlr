@@ -1,8 +1,8 @@
 # Trabajo Practico ANTLR - Interprete MiniLang
 
-Variante asignada: **3 - do-while**.
+Variante asignada: **4 - repeat-until**.
 
-Este proyecto implementa un interprete simple en Java usando **ANTLR4** y el patron **Visitor**. El lenguaje implementado se llama MiniLang y permite declarar variables, asignar valores, evaluar expresiones, imprimir por consola, usar condicionales `if-else` y ejecutar la estructura diferencial `do-while`.
+Este proyecto implementa un interprete simple en Java usando **ANTLR4** y el patron **Visitor**. El lenguaje implementado se llama MiniLang y permite declarar variables, asignar valores, evaluar expresiones, imprimir por consola, usar condicionales `if-else` y ejecutar la estructura diferencial `repeat-until`.
 
 ## Integrantes
 
@@ -46,13 +46,13 @@ if (nombre > 5) {
 }
 ```
 
-- Variante diferencial `do-while`:
+- Variante diferencial `repeat-until`:
 
 ```minilang
-do {
+repeat {
     print(nombre);
     nombre = nombre + 1;
-} while (nombre < 15);
+} until (nombre == 15);
 ```
 
 - Comentarios:
@@ -92,7 +92,7 @@ tp-interprete-antlr/
 |-- pom.xml
 |-- README.md
 |-- examples/
-|   |-- do_while.ml
+|   |-- repeat_until.ml
 |   `-- error_semantico.ml
 `-- src/
     `-- main/
@@ -124,7 +124,7 @@ tp-interprete-antlr/
 
 - El proyecto separa responsabilidades en distintas clases: `SemanticAnalyzer` valida el programa, `Interpreter` lo ejecuta, `SymbolTable` guarda variables y tipos, y `Value` representa valores en tiempo de ejecucion.
 
-- La variante asignada fue `do-while`, por lo que se implemento una estructura que ejecuta primero el bloque y luego evalua la condicion. La condicion debe ser booleana.
+- La variante asignada fue `repeat-until`, por lo que se implemento una estructura que ejecuta primero el bloque y luego evalua la condicion de corte. La condicion debe ser booleana y el ciclo termina cuando esa condicion resulta verdadera.
 
 - Los mensajes de error se muestran de forma clara para distinguir errores sintacticos, errores semanticos y errores de ejecucion.
 
@@ -159,7 +159,7 @@ Es la gramatica del lenguaje. Define:
 - Declaraciones y asignaciones.
 - `print`.
 - `if-else`.
-- `do-while`.
+- `repeat-until`.
 - Expresiones aritmeticas, relacionales y logicas.
 - Tokens para enteros, reales, strings, booleanos, identificadores y comentarios.
 
@@ -171,11 +171,11 @@ program
     ;
 ```
 
-La variante `do-while` esta definida por:
+La variante `repeat-until` esta definida por:
 
 ```antlr
-doWhileStmt
-    : 'do' block 'while' '(' expr ')' ';'
+repeatUntilStmt
+    : 'repeat' block 'until' '(' expr ')' ';'
     ;
 ```
 
@@ -217,7 +217,7 @@ Valida:
 - Compatibilidad de tipos en asignaciones.
 - Operaciones invalidas entre tipos incompatibles.
 - Condiciones booleanas en `if`.
-- Condiciones booleanas en `do-while`.
+- Condiciones booleanas en `repeat-until`.
 - Division por cero cuando el cero aparece de forma literal.
 
 Ejemplo de error detectado:
@@ -225,12 +225,12 @@ Ejemplo de error detectado:
 ```minilang
 var n : int = 0;
 
-do {
+repeat {
     print(n);
-} while (n);
+} until (n);
 ```
 
-La condicion del `do-while` debe ser `bool`, pero `n` es `int`.
+La condicion del `repeat-until` debe ser `bool`, pero `n` es `int`.
 
 ### `Interpreter.java`
 
@@ -244,15 +244,15 @@ Se encarga de:
 - Imprimir valores.
 - Ejecutar bloques.
 - Ejecutar `if-else`.
-- Ejecutar `do-while`.
+- Ejecutar `repeat-until`.
 - Detectar division por cero durante la ejecucion cuando el valor se calcula en tiempo de ejecucion.
 
-El `do-while` se ejecuta asi:
+El `repeat-until` se ejecuta asi:
 
-1. Ejecuta primero el bloque del `do`.
-2. Evalua la condicion del `while`.
-3. Si la condicion es verdadera, repite.
-4. Si la condicion es falsa, termina.
+1. Ejecuta primero el bloque del `repeat`.
+2. Evalua la condicion del `until`.
+3. Si la condicion es falsa, repite.
+4. Si la condicion es verdadera, termina.
 
 Esto garantiza que el bloque se ejecute al menos una vez.
 
@@ -403,7 +403,7 @@ Run As > Maven build...
 En `Goals`, escribir:
 
 ```text
-exec:java -Dexec.args="examples/do_while.ml"
+exec:java -Dexec.args="examples/repeat_until.ml"
 ```
 
 Salida esperada:
@@ -434,7 +434,7 @@ exec:java -Dexec.args="examples/error_semantico.ml"
 Salida esperada:
 
 ```text
-Error semantico en linea 3: La condicion del do-while debe ser booleana. Tipo recibido: INT.
+Error semantico en linea 3: La condicion del repeat-until debe ser booleana. Tipo recibido: INT.
 ```
 
 ## Como ejecutarlo desde consola
@@ -443,7 +443,7 @@ Si Maven esta instalado en consola:
 
 ```bash
 mvn clean generate-sources compile
-mvn exec:java -Dexec.args="examples/do_while.ml"
+mvn exec:java -Dexec.args="examples/repeat_until.ml"
 ```
 
 Para probar el error semantico:
@@ -454,18 +454,18 @@ mvn exec:java -Dexec.args="examples/error_semantico.ml"
 
 ## Ejemplo principal
 
-Archivo: `examples/do_while.ml`
+Archivo: `examples/repeat_until.ml`
 
 ```minilang
-// Variante asignada: do-while.
+// Variante asignada: repeat-until.
 var n : int = 0;
 var suma : int = 0;
 
-do {
+repeat {
     print(n);
     suma = suma + n;
     n = n + 1;
-} while (n < 5);
+} until (n == 5);
 
 if (suma == 10) {
     print("Suma correcta");
@@ -477,7 +477,7 @@ if (suma == 10) {
 Este ejemplo:
 
 1. Declara `n` y `suma`.
-2. Ejecuta un `do-while`.
+2. Ejecuta un `repeat-until`.
 3. Imprime los valores de `n` desde `0` hasta `4`.
 4. Suma esos valores.
 5. Verifica con un `if-else` que la suma sea `10`.

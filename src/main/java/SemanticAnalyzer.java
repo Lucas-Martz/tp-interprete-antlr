@@ -63,9 +63,9 @@ public class SemanticAnalyzer extends MiniLangBaseVisitor<Type> {
     }
 
     @Override
-    public Type visitDoWhileStmt(MiniLangParser.DoWhileStmtContext ctx) {
+    public Type visitRepeatUntilStmt(MiniLangParser.RepeatUntilStmtContext ctx) {
         visit(ctx.block());
-        requireBool(visit(ctx.expr()), ctx.getStart().getLine(), "La condicion del do-while debe ser booleana.");
+        requireBool(visit(ctx.expr()), ctx.getStart().getLine(), "La condicion del repeat-until debe ser booleana.");
         return Type.VOID;
     }
 

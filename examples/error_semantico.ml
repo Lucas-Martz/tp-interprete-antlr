@@ -1,6 +1,6 @@
 var n : int = 1;
 
-do {
+repeat {
     print(n);
     n = n + 1;
-} while (n + 1);
+} until (n + 1);

@@ -60,8 +60,8 @@ public class Main {
         } else if (statement.ifStmt() != null) {
             declareFromBlock(statement.ifStmt().block(0), runtimeSymbols);
             declareFromBlock(statement.ifStmt().block(1), runtimeSymbols);
-        } else if (statement.doWhileStmt() != null) {
-            declareFromBlock(statement.doWhileStmt().block(), runtimeSymbols);
+        } else if (statement.repeatUntilStmt() != null) {
+            declareFromBlock(statement.repeatUntilStmt().block(), runtimeSymbols);
         }
     }
 
