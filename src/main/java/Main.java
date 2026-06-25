@@ -1,8 +1,9 @@
+import java.io.IOException;
+
+import org.antlr.v4.gui.Trees;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-
-import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -23,6 +24,9 @@ public class Main {
             parser.addErrorListener(new ThrowingErrorListener());
 
             MiniLangParser.ProgramContext tree = parser.program();
+            System.out.println(tree.toStringTree(parser));
+
+            Trees.inspect(tree, parser);
 
             SymbolTable semanticSymbols = new SymbolTable();
             new SemanticAnalyzer(semanticSymbols).visit(tree);
